@@ -5,10 +5,10 @@ edition = "2024"
 
 [dependencies]
 syncrim = { path = "../../syncrim", default-features = false, features = ["components"]}
-veryl-simulator = { path = "../../veryl/crates/simulator" }
-veryl-parser = { path = "../../veryl/crates/parser" }
-veryl-analyzer = { path = "../../veryl/crates/analyzer" }
-veryl-metadata = { path = "../../veryl/crates/metadata" }
+veryl-simulator = "=0.22.0"
+veryl-parser = "=0.22.0"
+veryl-analyzer = "=0.22.0"
+veryl-metadata = "=0.22.0"
 
 serde = { version = "1", features = ["derive"] }
 typetag = "0.2"

@@ -1,6 +1,9 @@
 use std::fs;
 use std::path::Path;
 use veryl_parser::Parser;
+use veryl_parser::veryl_grammar_trait::Veryl;
+
+use crate::write_mod_file::write_mod_file;
 
 /**
  * A function that reads and translates all Veryl files of a given directory with a given output
@@ -41,6 +44,8 @@ pub fn read_veryl_files(source_dir: &Path, output_dir: &Path) -> anyhow::Result<
 
     veryl_files.sort();
 
+    let mut module_names: Vec<String> = Vec::new();
+
     for file_path in veryl_files {
         println!("Reading file: {}", file_path.display());
 
@@ -56,11 +61,11 @@ pub fn read_veryl_files(source_dir: &Path, output_dir: &Path) -> anyhow::Result<
             Ok(parsed_output) => {
                 println!("Parsed {}", file_path.display());
                 
-                crate::code_gen::generate_code(parsed_output.veryl, &output_dir) 
+                module_names.extend(crate::code_gen::generate_code(&parsed_output.veryl, &output_dir) 
                     .map_err(|error| {
                     //eprintln!("Could not generate code from {}: {error}", file_path.display());
                     anyhow::anyhow!("Could not generate code from {}: {error}", file_path.display())
-                })?;
+                })?);
             }
             Err(error) => {
                 //eprintln!("Parsing failed for {}:\n{error:?}", file_path.display());
@@ -68,6 +73,8 @@ pub fn read_veryl_files(source_dir: &Path, output_dir: &Path) -> anyhow::Result<
             }
         }
     }
+
+    crate::write_mod_file::write_mod_file(&module_names, &output_dir)?;
 
     Ok(())
 }
@@ -88,7 +95,7 @@ fn read_veryl_file(file_path: &Path, output_dir: &Path) -> anyhow::Result<()> {
     let parsed_output = Parser::parse(&code, &file_path)
         .map_err(|e| anyhow::anyhow!("Parsing failed for {}: {e:?}", file_path.display()))?;
 
-    crate::code_gen::generate_code(parsed_output.veryl, output_dir)
+    crate::code_gen::generate_code(&parsed_output.veryl, output_dir)
         .map_err(|e| anyhow::anyhow!("Could not generate code from {}: {e}", file_path.display()))?;
 
     Ok(())

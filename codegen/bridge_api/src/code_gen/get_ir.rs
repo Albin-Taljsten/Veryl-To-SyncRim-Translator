@@ -7,7 +7,7 @@ use anyhow::{Result};
  * Gets the IR (Intermediate Representation)<br>
  * The IR comes from the given root node i.e. the given source code
  */
-pub(super) fn get_ir(root_node: veryl_grammar_trait::Veryl) -> Result<Ir> {
+pub fn get_ir(root_node: &veryl_grammar_trait::Veryl) -> Result<Ir> {
     
     // Analyzer configuration/project context.
     let metadata = Metadata::create_default("test")?;

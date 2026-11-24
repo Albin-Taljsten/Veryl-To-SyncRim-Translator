@@ -162,7 +162,8 @@ impl VerylBridge {
 
 
 pub fn load_veryl_bridge(source_path: &str, top_module: &str) -> Result<VerylBridge, String> {
-    let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests").join("fixtures").join(source_path);
+    // Add this when testing: ".join("tests").join("fixtures")"
+    let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(source_path);
     let source_str = source.to_str().ok_or_else(|| format!("Invalid Veryl source path '{}'", source.display()))?;
 
     let veryl_design = load_veryl_simulator(source_str, top_module).unwrap();

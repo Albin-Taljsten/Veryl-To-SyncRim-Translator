@@ -4,6 +4,7 @@ use std::{fs::{self, File}, io::{self, BufWriter, Write}, path::{Path, PathBuf}}
 use veryl_analyzer::{ir::{Component, Ir, Module, VarKind::{self}}};
 
 mod get_ir;
+pub(crate) use get_ir::get_ir;
 
 mod struct_gen;
 mod dummy_gen;
@@ -53,7 +54,7 @@ impl CodeGenerator {
     }
 }
 
-pub fn generate_code(root_node: veryl_grammar_trait::Veryl, output_path: impl AsRef<Path>) -> std::io::Result<()> {
+pub fn generate_code(root_node: &veryl_grammar_trait::Veryl, output_path: impl AsRef<Path>) -> anyhow::Result<Vec<String>> {
     let ir = match get_ir::get_ir(root_node) {
         Ok(ir) => ir,
         Err(e) => {
@@ -62,7 +63,16 @@ pub fn generate_code(root_node: veryl_grammar_trait::Veryl, output_path: impl As
         }
     };
 
-    CodeGenerator::new(ir, output_path).generate()
+    let module_names = ir.components
+        .iter()
+        .filter_map(|component| match component {
+            Component::Module(module) => Some(module.name.to_string()),
+            _ => None,
+        })
+        .collect();
+
+    CodeGenerator::new(ir, output_path).generate()?;
+    Ok(module_names)
 }
 
 /**

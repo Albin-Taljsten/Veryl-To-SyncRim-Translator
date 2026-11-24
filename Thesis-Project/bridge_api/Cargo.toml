@@ -1,0 +1,13 @@
+[package]
+name = "bridge_api"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Points directly to the folder that your cargo-make task will pull down
+# syncrim = { path = "../syncrim" }
+veryl-parser = "=0.22.0"
+veryl-analyzer = "=0.22.0"
+veryl-metadata = "=0.22.0"
+serde_json = "1.0"
+anyhow = "1.0.104"

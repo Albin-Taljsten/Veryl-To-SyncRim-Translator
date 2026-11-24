@@ -1,0 +1,14 @@
+# Ignore Cargo compilation output
+/target/
+Cargo.lock
+
+# Ignore veryl folder by default with the below exceptions
+/veryl/*
+
+# Keep these directories
+!/veryl/src/
+!/veryl/test/
+
+# Ignore src contents but still allow for push of src file
+/veryl/src/*
+!/veryl/src/.gitkeep

@@ -1,0 +1,3 @@
+// ";" is the incorrect ending when adding a port into the port section
+// It should be "," or "" (i.e blank space / no character)
+module TestSyntax ( data: input logic; ) {}
